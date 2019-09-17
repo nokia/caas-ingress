@@ -1,0 +1,38 @@
+{{/*
+© 2019 Nokia
+Licensed under the BSD 3 Clause license
+SPDX-License-Identifier: BSD-3-Clause
+*/}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "caas-ingress.fullname" . }}
+  labels:
+{{ include "caas-ingress.labels" . | indent 4 }}
+spec:
+  type: ClusterIP
+  externalIPs:
+    {{- toYaml .Values.service.externalIPs | nindent 4 }}
+  ports:
+{{ if .Values.service.elasticsearch_external_port }}
+    - name: elasticsearch
+      protocol: TCP
+      port: {{ .Values.service.elasticsearch_external_port }}
+      targetPort: 9200
+{{ end }}
+{{ if .Values.service.prometheus_external_port }}
+    - name: prometheus
+      protocol: TCP
+      port: {{ .Values.service.prometheus_external_port }}
+      targetPort: 9090
+{{ end }}
+{{ if .Values.service.kubeapi_external_port }}
+    - name: kubeapi
+      protocol: TCP
+      port: {{ .Values.service.kubeapi_external_port }}
+      targetPort: 6443
+{{ end }}
+  selector:
+    app.kubernetes.io/name: {{ include "caas-ingress.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

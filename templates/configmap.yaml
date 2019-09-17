@@ -1,0 +1,42 @@
+{{/*
+© 2019 Nokia
+Licensed under the BSD 3 Clause license
+SPDX-License-Identifier: BSD-3-Clause
+*/}}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: caas-ingress-configmap
+data:
+  nginx.conf: |-
+    error_log  /dev/stderr;
+    events {
+    }
+    http {
+      access_log /dev/null;
+      server {
+        listen 9200 ssl;
+        ssl_certificate_key  /certs/tls.key;
+        ssl_certificate      /certs/tls.crt;
+        location / {
+          proxy_pass http://elasticsearch-logging.kube-system.svc.rec.io:9200;
+        }
+      }
+      server {
+        listen 9090 ssl;
+        ssl_certificate_key  /certs/tls.key;
+        ssl_certificate      /certs/tls.crt;
+        location / {
+          proxy_pass https://prometheus.kube-system.svc.rec.io:9090;
+        }
+      }
+      server {
+        listen 6443 ssl;
+        ssl_certificate_key  /certs/tls.key;
+        ssl_certificate      /certs/tls.crt;
+        location / {
+          proxy_pass http://localhost:80;
+        }
+      }
+    }
