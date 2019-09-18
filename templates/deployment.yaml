@@ -1,0 +1,58 @@
+{{/*
+© 2019 Nokia
+Licensed under the BSD 3 Clause license
+SPDX-License-Identifier: BSD-3-Clause
+*/}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "caas-ingress.fullname" . }}
+  labels:
+{{ include "caas-ingress.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "caas-ingress.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "caas-ingress.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.nginx }}"
+          livenessProbe:
+            httpGet:
+              path: /api
+              port: 6443
+              scheme: HTTPS
+          readinessProbe:
+            httpGet:
+              path: /api
+              port: 6443
+              scheme: HTTPS
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx
+              readOnly: true
+            - name: certs
+              mountPath: /certs
+              readOnly: true
+        - name: kubectl
+          image: "{{ .Values.image.kubectl }}"
+          args: [ "proxy", "-p", "80" ]
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: caas-ingress-configmap
+        - name: certs
+          secret:
+            secretName: caas-ingress-certs
+      nodeSelector:
+        nodetype: caas_master
+      terminationGracePeriodSeconds: 0
+      serviceAccountName: caas-ingress

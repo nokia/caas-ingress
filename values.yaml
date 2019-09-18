@@ -1,0 +1,20 @@
+# © 2019 Nokia
+# Licensed under the BSD 3 Clause license
+# SPDX-License-Identifier: BSD-3-Clause
+
+image:
+  nginx: "nginx:1.17.3"
+  kubectl: "buoyantio/kubectl:v1.14.3"
+
+replicaCount: 1
+
+service:
+  externalIPs:
+    - 10.20.30.40
+    - 10.20.30.41
+    - 10.20.30.42
+
+  # comment out to disable
+  elasticsearch_external_port: 19200
+  prometheus_external_port: 19090
+  kubeapi_external_port: 16443

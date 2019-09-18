@@ -1,0 +1,51 @@
+# © 2019 Nokia
+# Licensed under the BSD 3 Clause license
+# SPDX-License-Identifier: BSD-3-Clause
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: caas-ingress
+  namespace: caas-ingress
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: caas-ingress-cr
+rules:
+- apiGroups: [""]
+  resources:
+  - pods
+  - nodes
+  - nodes/stats
+  - namespaces
+  verbs:
+  - get
+  - list
+- apiGroups: ["metrics.k8s.io"]
+  resources:
+  - pods
+  - nodes
+  verbs:
+  - get
+  - list
+- apiGroups: ["custom.metrics.k8s.io"]
+  resources:
+  - pods
+  - nodes
+  verbs:
+  - get
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: caas-ingress-crb
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: caas-ingress-cr
+subjects:
+- kind: ServiceAccount
+  name: caas-ingress
+  namespace: caas-ingress
