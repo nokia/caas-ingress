@@ -16,7 +16,8 @@ The following CaaS services are proxied externally:
 
 The external IP addresses and ports are configurable in the `values.yaml` file.
 
-For external HTTPS traffic new self-signed TLS key is generated during chart deployment. This means the external tools will complain about the untrusted key.
+For external HTTPS traffic an option is provided to use a custom TLS certificate (preferably signed by a trusted CA). This certificate must be loaded into a TLS Secret inside the same namespace, where the chart will be deployed into.
+If custom TLS Secret is not specified, a new self-signed TLS key is generated during chart deployment. This means the external tools will complain about the untrusted key.
 
 For K8S API access a restricted ServiceAccount is being used, which has `get` & `list` permissions for the following endpoints:
 
@@ -48,8 +49,20 @@ For K8S API access a restricted ServiceAccount is being used, which has `get` & 
    kubectl create -f caas-ingress/caas-ingress-sa.yaml
    ```
 
-4. Deploy the helm chart:
+4. OPTIONAL: Load your custom TLS certification (named as `tls.crt` & `tls.key`) into a TLS Secret:
+
+   ```sh
+   kubectl -n caas-ingress create secret tls caas-ingress-https --cert=tls.crt --key=tls.key
+   ```
+
+5. Deploy the helm chart:
 
    ```sh
    helm install -n caas-ingress caas-ingress*/ --namespace caas-ingress --set service.externalIPs="{10.20.30.41,10.20.30.42,10.20.30.43}" --wait
+   ```
+
+   or in case custom TLS certification is provided:
+
+   ```sh
+   helm install -n caas-ingress caas-ingress*/ --namespace caas-ingress --set service.externalIPs="{10.20.30.41,10.20.30.42,10.20.30.43}" --set custom_tls_secret=caas-ingress-https --wait
    ```
