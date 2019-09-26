@@ -49,7 +49,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Create self-signed cert for HTTPS
 */}}
-{{- define "caas-ingress.gen-certs" -}}
+{{- define "caas-ingress.gen-cert" -}}
 {{- $ca := genCA "caas-ingress-ca" 365 -}}
 {{- $altNames := .Values.service.externalIPs -}}
 {{- $cert := genSignedCert ( include "caas-ingress.name" . ) nil $altNames 365 $ca -}}

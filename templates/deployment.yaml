@@ -51,7 +51,11 @@ spec:
             name: caas-ingress-configmap
         - name: certs
           secret:
-            secretName: caas-ingress-certs
+{{ if .Values.custom_tls_secret }}
+            secretName: {{ .Values.custom_tls_secret }}
+{{ else }}
+            secretName: caas-ingress-cert
+{{ end }}
       nodeSelector:
         nodetype: caas_master
       terminationGracePeriodSeconds: 0

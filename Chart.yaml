@@ -10,4 +10,4 @@ description: HTTP/HTTPS proxy to access CaaS internal services for monitoring pu
 maintainers:
 - email: ferenc.2.toth@nokia.com
   name: Ferenc Toth
-version: 1.0.0
+version: 1.1.0
