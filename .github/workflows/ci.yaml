@@ -11,5 +11,5 @@ jobs:
     - uses: actions/checkout@v1
     - name: helm lint
       run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+        curl -sS https://get.helm.sh/helm-v2.14.3-linux-amd64.tar.gz | tar xzv
+        linux-amd64/helm lint .
