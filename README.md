@@ -1,5 +1,7 @@
 # caas-ingress
 
+[![Actions Status](https://github.com/nokia/caas-ingress/workflows/CI/badge.svg)](https://github.com/nokia/caas-ingress/actions)
+
 ## Introduction
 
 `caas-ingress` is a helm chart to expose [Akraino](https://www.lfedge.org/projects/akraino/) [Radio Edge Cloud](https://wiki.akraino.org/pages/viewpage.action?pageId=6128402) (REC) internal CaaS services over external interfaces, so external monitoring applications can access them over HTTPS protocol.
