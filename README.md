@@ -1,5 +1,9 @@
 # caas-ingress
 
+[![License BSD-3](https://img.shields.io/github/license/nokia/caas-ingress)](https://github.com/nokia/caas-ingress/blob/master/LICENSE)
+[![Release](https://img.shields.io/github/v/release/nokia/caas-ingress)](https://github.com/nokia/caas-ingress/releases)
+[![Release Date](https://img.shields.io/github/release-date/nokia/caas-ingress)](https://github.com/nokia/caas-ingress/releases)
+[![Last Commit Date](https://img.shields.io/github/last-commit/nokia/caas-ingress)](https://github.com/nokia/caas-ingress/commits/master)
 [![Actions Status](https://github.com/nokia/caas-ingress/workflows/CI/badge.svg)](https://github.com/nokia/caas-ingress/actions)
 
 ## Introduction
