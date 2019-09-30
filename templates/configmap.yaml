@@ -15,22 +15,27 @@ data:
     }
     http {
       access_log /dev/null;
+{{ if .Values.service.elasticsearch_external_port }}
       server {
         listen 9200 ssl;
         ssl_certificate_key  /certs/tls.key;
         ssl_certificate      /certs/tls.crt;
         location / {
-          proxy_pass http://elasticsearch-logging.kube-system.svc.rec.io:9200;
+          proxy_pass http://elasticsearch-logging.kube-system:9200;
         }
       }
+{{ end }}
+{{ if .Values.service.prometheus_external_port }}
       server {
         listen 9090 ssl;
         ssl_certificate_key  /certs/tls.key;
         ssl_certificate      /certs/tls.crt;
         location / {
-          proxy_pass https://prometheus.kube-system.svc.rec.io:9090;
+          proxy_pass https://prometheus.kube-system:9090;
         }
       }
+{{ end }}
+{{ if .Values.service.kubeapi_external_port }}
       server {
         listen 6443 ssl;
         ssl_certificate_key  /certs/tls.key;
@@ -39,4 +44,5 @@ data:
           proxy_pass http://localhost:80;
         }
       }
+{{ end }}
     }
